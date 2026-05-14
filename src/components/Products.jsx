@@ -24,7 +24,7 @@ const Products = ({ scrollToSection }) => {
   }, []);
 
   const sendWhatsApp = (product) => {
-    const phoneNumber = "919373111112";
+    const phoneNumber = "918208326059";
     
     // मेसेजचे फॉरमॅट सेट करा
     const message = `*Shreya Traders - New Enquiry*%0A` +
