@@ -1,49 +1,56 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { auth } from './firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 
-// 1. Sarv components ithe import kara
+// Components
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import Excellence from './components/Excellence'; // Navin banavlele page
 import Products from './components/Products';
-import About from './components/About';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import WhatsAppButton from './components/WhatsAppButton';
+import Admin from './components/Admin';
+import Login from './components/Login';
 
 function App() {
-  // Active section track karnyathi state
-  const [activeSection, setActiveSection] = useState('home');
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Smooth scroll logic
-  const scrollToSection = (id) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      setActiveSection(id);
-    }
-  };
+  useEffect(() => {
+    // युजर लॉगिन आहे की नाही हे तपासण्यासाठी
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  if (loading) return null; // लोड होईपर्यंत काहीही दाखवू नका
 
   return (
-    <div className="bg-white">
-      {/* 2. Components na yogy kramat ithe vapra */}
-      <Navbar activeSection={activeSection} scrollToSection={scrollToSection} />
-      
-      <main>
-        <Hero scrollToSection={scrollToSection} />
-        
-        {/* Hingmire Trading sarakha professional excellence section */}
-        <Excellence /> 
-        
-        <About />
-        <Products scrollToSection={scrollToSection} />
-        <Contact />
-      </main>
+    <Router>
+      <Routes>
+        {/* Main Website Route */}
+        <Route path="/" element={
+          <div className="min-h-screen bg-white">
+            <Navbar />
+            <Hero />
+            <Products />
+            <Contact />
+            <Footer />
+          </div>
+        } />
 
-      <Footer scrollToSection={scrollToSection} />
-      
-      {/* Floating WhatsApp Button */}
-      <WhatsAppButton />
-    </div>
+        {/* Login Route */}
+        <Route path="/login" element={<Login />} />
+
+        {/* Protected Admin Route */}
+        <Route 
+          path="/admin" 
+          element={user ? <Admin /> : <Navigate to="/login" />} 
+        />
+      </Routes>
+    </Router>
   );
 }
 

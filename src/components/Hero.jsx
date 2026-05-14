@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight, Phone, MessageSquare } from 'lucide-react';
+import heroBg from '../assets/goal.jpeg'; // Professional Raisin HD Photo for Shreya Traders
 
 const Hero = ({ scrollToSection }) => {
   return (
@@ -14,7 +15,7 @@ const Hero = ({ scrollToSection }) => {
         className="absolute inset-0 bg-cover bg-center bg-fixed transition-all duration-1000" 
         style={{ 
           // Professional Raisin HD Photo for Shreya Traders
-          backgroundImage: "url('https://images.unsplash.com/photo-1590004953392-5aba2e785943?q=80&w=2000&auto=format&fit=crop')" 
+          backgroundImage: `url(${heroBg})`
         }}
       >
         {/* Dark Gradient Overlay for text readability */}
